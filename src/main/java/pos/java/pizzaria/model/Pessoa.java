@@ -31,8 +31,7 @@ public class Pessoa {
     }
     
 
-    public Pessoa(Long id, String nome) {
-        this.id = id;
+    public Pessoa(String nome) {
         this.nome = nome;
     }
 

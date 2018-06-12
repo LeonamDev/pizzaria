@@ -43,11 +43,11 @@ public class Endereco {
         
     }
 
-    public Endereco(long id, String rua, int numero, String referencia) {
-        this.id = id;
+    public Endereco(String rua, int numero, String referencia, Cliente cliente) {
         this.rua = rua;
         this.numero = numero;
         this.referencia = referencia;
+        this.cliente = cliente;
     }
 
     public long getId() {
@@ -88,6 +88,14 @@ public class Endereco {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
     
     

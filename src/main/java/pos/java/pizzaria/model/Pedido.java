@@ -5,8 +5,9 @@
  */
 package pos.java.pizzaria.model;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -35,7 +36,7 @@ public class Pedido {
     private Cliente cliente;
     
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProdutoPedido> produtos;
+    private Set<ProdutoPedido> produtoPedidos = new HashSet<>();
     
     @ManyToOne
     @JoinColumn(name = "endereco_id")
@@ -45,16 +46,16 @@ public class Pedido {
     private double taxa_entrega;
     private double valor;
     private double troco;
-    private Date data;
-    private Date hora;
+    private LocalDate data;
+    private LocalDateTime hora;
     private int status;
     
     public Pedido(){
         
     }
 
-    public Pedido(long id, Cliente cliente, Endereco endereco, boolean entrega, double desconto, double taxa_entrega, double valor, double troco, Date data, Date hora, int status) {
-        this.id = id;
+    public Pedido( Cliente cliente, Endereco endereco, boolean entrega, double desconto, double taxa_entrega, double valor, double troco, LocalDate data, LocalDateTime hora, int status) {
+        
         this.cliente = cliente;
         this.endereco = endereco;
         this.entrega = entrega;
@@ -83,12 +84,12 @@ public class Pedido {
         this.cliente = cliente;
     }
 
-    public Set<ProdutoPedido> getProdutos() {
-        return produtos;
+    public Set<ProdutoPedido> getProdutoPedidos() {
+        return produtoPedidos;
     }
 
-    public void setProdutos(Set<ProdutoPedido> produtos) {
-        this.produtos = produtos;
+    public void setProdutoPedidos(Set<ProdutoPedido> produtoPedidos) {
+        this.produtoPedidos = produtoPedidos;
     }
 
     public Endereco getEndereco() {
@@ -139,19 +140,19 @@ public class Pedido {
         this.troco = troco;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
-    public Date getHora() {
+    public LocalDateTime getHora() {
         return hora;
     }
 
-    public void setHora(Date hora) {
+    public void setHora(LocalDateTime hora) {
         this.hora = hora;
     }
 
@@ -162,13 +163,6 @@ public class Pedido {
     public void setStatus(int status) {
         this.status = status;
     }
-
-   
-    
-    
-    
-    
-            
     
     
 }

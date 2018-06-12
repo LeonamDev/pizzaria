@@ -31,8 +31,8 @@ public class Cliente extends Pessoa{
     public Cliente() {
     }
 
-    public Cliente(int telefone, Long id, String nome) {
-        super(id, nome);
+    public Cliente(int telefone, String nome) {
+        super(nome);
         this.telefone = telefone;
     }
 

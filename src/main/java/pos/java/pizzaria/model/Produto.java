@@ -6,8 +6,10 @@
 package pos.java.pizzaria.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,8 +41,8 @@ public class Produto {
     @OneToMany(mappedBy = "produto")
     private List<Ingrediente> ingredientes = new ArrayList();
     
-    @OneToMany(mappedBy = "pedido")
-    private Set<ProdutoPedido> pedidos;
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProdutoPedido> produtoPedidos = new HashSet<>();
     
     public Produto(){
         
@@ -101,12 +103,12 @@ public class Produto {
         this.ingredientes = ingredientes;
     }
 
-    public Set<ProdutoPedido> getPedidos() {
-        return pedidos;
+    public Set<ProdutoPedido> getProdutoPedidos() {
+        return produtoPedidos;
     }
 
-    public void setPedidos(Set<ProdutoPedido> pedidos) {
-        this.pedidos = pedidos;
+    public void setProdutoPedidos(Set<ProdutoPedido> produtoPedidos) {
+        this.produtoPedidos = produtoPedidos;
     }
 
    
