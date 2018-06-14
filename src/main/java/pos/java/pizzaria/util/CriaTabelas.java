@@ -5,7 +5,6 @@
  */
 package pos.java.pizzaria.util;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -68,19 +67,18 @@ public class CriaTabelas {
 
         p2.getIngredientes().add(i3);
         p2.getIngredientes().add(i4);
-        
 
         List<Pedido> pedidos = new ArrayList();
         Pedido pedido = new Pedido(cliente, endereco, true, 23, 5, 70, 10,
-                new java.sql.Date(System.currentTimeMillis()),  new java.sql.Date(System.currentTimeMillis()), 1);
+                new java.sql.Date(System.currentTimeMillis()), new java.sql.Date(System.currentTimeMillis()), 1);
         Pedido pedido2 = new Pedido(cliente, endereco, true, 23, 5, 70, 10,
-                 new java.sql.Date(System.currentTimeMillis()),  new java.sql.Date(System.currentTimeMillis()), 1);
+                new java.sql.Date(System.currentTimeMillis()), new java.sql.Date(System.currentTimeMillis()), 1);
         pedidos.add(pedido);
         pedidos.add(pedido2);
 
         ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, 5, "Bem quente, por favor.");
-        ProdutoPedido produtoPedido2 = new ProdutoPedido(p2, pedido2, 5, "Com bastante queijo!");
-
+        ProdutoPedido produtoPedido2 = new ProdutoPedido(p2, pedido2, 7, "Com bastante queijo!");
+        
         p1.getProdutoPedidos().add(produtoPedido);
         p2.getProdutoPedidos().add(produtoPedido2);
 
@@ -119,25 +117,24 @@ public class CriaTabelas {
         } finally {
             if (trx.isActive()) {
                 trx.rollback();
+                manager.close();
             }
 
         }
 
-        PedidoRepository pedidoRepository = new PedidoRepository(manager);
+       /* PedidoRepository pedidoRepository = new PedidoRepository(manager);
 
         List<Pedido> pedids = pedidoRepository.listar();
-        
 
         for (Pedido pd : pedids) {
-            System.out.println("ID:" + pd.getId() + " - " + "Valor:" + pd.getValor() + "Endereco: " + pd.getEndereco().getRua());
-            
-           for(ProdutoPedido pdp: pd.getProdutoPedidos()){
-               System.out.println(pdp.getProduto().getNome());
-           }
-               
-        }
-        manager.close();
+            System.out.println("ID: " + pd.getId() + " - " + "Valor: " + pd.getValor() + "Endereco: " + pd.getEndereco().getRua());
 
+            for (ProdutoPedido pdp : pd.getProdutoPedidos()) {
+                System.out.println(pdp.getProduto().getNome());
+            }
+
+        }
+        */
     }
 
 }

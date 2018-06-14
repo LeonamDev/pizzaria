@@ -15,13 +15,9 @@
               content="text/html; charset=UTF-8">
     </head>
     <body>
-        <h1>Consulta de produtos</h1>
-        <form action="consulta-produtos" method="get">
-            Nome: <input type="text" name="nome" value="${param.nome}" />
-            <input type="submit" value="Consultar" />
-        </form>
+        <h1>Lista de Pedidos</h1>
         <c:if test="${empty pedidos}">
-            <strong>Nenhum produto encontrado.</strong>
+            <strong>Nenhum pedido encontrado.</strong>
         </c:if>
 
         <c:if test="${not empty pedidos}">
@@ -33,10 +29,12 @@
                     <th>Taxa de Entrega</th>
                     <th>Troco</th>
                     <th>Valor</th>
+                    <th>Produto(s)</th>
+                    <th>Ações</th>
                 </tr>
                 <c:forEach items="${pedidos}" var="pedido">
                     <tr>
-                        <td>${pedido.produtoPedidos}</td>
+                        <td>${pedido.data}</td>
                         <td><fmt:setLocale value="pt_BR" />
                             <fmt:formatNumber type="currency" value="${pedido.desconto}" />
                         </td>
@@ -48,12 +46,29 @@
                         <td>
                             <fmt:setLocale value="pt_BR" />
                             <fmt:formatNumber type="currency" value="${(pedido.valor + pedido.taxa_entrega) - pedido.desconto}" /></td>
+                   
+                        <td>
+                             <c:forEach items="${pedido.produtoPedidos}" var="produtoPedido">
+                            <a>${produtoPedido.produto.nome}.</a>
+                            <a>Qtd: ${produtoPedido.quantidade}.</a>
+                            <a>Obs.: ${produtoPedido.obs}</a><br>
+                               </c:forEach>
+                        </td>
+                     
+                        <td>
+                            <a><button>Editar</button></a>
+                            <form action="consulta-pedidos" method="post">
+                                <input type="hidden" name="pedido_id" value="${pedido.id}" />
+                            <a><button type="submit">Deletar</button></a>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>
         </c:if><br>
-    <aw:pesquisa acao="consulta-produtos" nomeParametro="nome"
-                 descricaoParametro="Nome" />
+        <form action="consulta-pedidos" method="post">
+            <input type="submit" value="Novo Pedido" />
+        </form>
     <br/><br/>
 
 </body>

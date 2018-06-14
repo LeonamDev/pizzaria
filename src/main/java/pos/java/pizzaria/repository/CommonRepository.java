@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 /**
  *
  * @author leonam
+ * @param <T>
  */
 public abstract class CommonRepository<T> {
 
@@ -18,6 +19,14 @@ public abstract class CommonRepository<T> {
 
     public CommonRepository(EntityManager manager) {
         this.manager = manager;
+    }
+
+    public void beginTransatcion() {
+        manager.getTransaction().begin();
+    }
+
+    public void commitTransaction() {
+        manager.getTransaction().commit();
     }
 
     public void adicionar(T t) {
@@ -32,7 +41,8 @@ public abstract class CommonRepository<T> {
         manager.remove(t);
     }
 
-    public T encontrar(Class<T> c, long id) {
+    public T encontrar(Class<T> c, String idd) {
+        Long id = Long.parseLong(idd);
         return manager.find(c, id);
     }
 
