@@ -24,6 +24,7 @@ public class ProdutoPedido implements Serializable {
     @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
+    
     @Id
     @ManyToOne
     @JoinColumn(name = "pedido_id")

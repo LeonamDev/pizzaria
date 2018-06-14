@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -46,15 +48,15 @@ public class Pedido {
     private double taxa_entrega;
     private double valor;
     private double troco;
-    private LocalDate data;
-    private LocalDateTime hora;
+    private java.sql.Date data;
+    private java.sql.Date hora;
     private int status;
     
     public Pedido(){
         
     }
 
-    public Pedido( Cliente cliente, Endereco endereco, boolean entrega, double desconto, double taxa_entrega, double valor, double troco, LocalDate data, LocalDateTime hora, int status) {
+    public Pedido( Cliente cliente, Endereco endereco, boolean entrega, double desconto, double taxa_entrega, double valor, double troco, java.sql.Date data, java.sql.Date hora, int status) {
         
         this.cliente = cliente;
         this.endereco = endereco;
@@ -140,19 +142,19 @@ public class Pedido {
         this.troco = troco;
     }
 
-    public LocalDate getData() {
+    public java.sql.Date getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
+    public void setData(java.sql.Date data) {
         this.data = data;
     }
 
-    public LocalDateTime getHora() {
+    public java.util.Date getHora() {
         return hora;
     }
 
-    public void setHora(LocalDateTime hora) {
+    public void setHora(java.sql.Date hora) {
         this.hora = hora;
     }
 

@@ -5,7 +5,10 @@
  */
 package pos.java.pizzaria.repository;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import pos.java.pizzaria.model.Pedido;
 import pos.java.pizzaria.model.Produto;
 
 /**
@@ -22,6 +25,11 @@ public class ProdutoRepository {
     
     public void adicionar(Produto produto) {
         this.manager.persist(produto);
+    }
+    
+    public List<Produto> listar() {
+        TypedQuery<Produto> query = manager.createQuery("select p from Produto p", Produto.class);
+        return query.getResultList();
     }
     
 }

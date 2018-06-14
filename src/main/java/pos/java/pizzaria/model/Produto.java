@@ -15,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -38,7 +40,12 @@ public class Produto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
     
-    @OneToMany(mappedBy = "produto")
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "produto_ingrediente", 
+        joinColumns = { @JoinColumn(name = "produto_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "ingrediente_id") }
+    )
     private List<Ingrediente> ingredientes = new ArrayList();
     
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
