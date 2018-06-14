@@ -5,23 +5,26 @@
  */
 package pos.java.pizzaria.repository;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import pos.java.pizzaria.model.Endereco;
+import pos.java.pizzaria.model.Pedido;
 
 /**
  *
  * @author leonam
  */
-public class EnderecoRepository {
-    
-    private EntityManager manager;
+public class EnderecoRepository extends CommonRepository<Endereco> {
 
     public EnderecoRepository(EntityManager manager) {
-        this.manager = manager;
+        super(manager);
     }
-    
-    public void adicionar(Endereco endereco) {
-        this.manager.persist(endereco);
+
+    @Override
+    public List<Endereco> listar() {
+        TypedQuery<Endereco> query = manager.createQuery("select p from Endereco p", Endereco.class);
+        return query.getResultList();
     }
-    
+
 }

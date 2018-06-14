@@ -15,21 +15,16 @@ import pos.java.pizzaria.model.Produto;
  *
  * @author leonam
  */
-public class ProdutoRepository {
-    
-    private EntityManager manager;
+public class ProdutoRepository extends CommonRepository<Produto> {
 
     public ProdutoRepository(EntityManager manager) {
-        this.manager = manager;
+        super(manager);
     }
-    
-    public void adicionar(Produto produto) {
-        this.manager.persist(produto);
-    }
-    
+
+    @Override
     public List<Produto> listar() {
         TypedQuery<Produto> query = manager.createQuery("select p from Produto p", Produto.class);
         return query.getResultList();
     }
-    
+
 }

@@ -5,24 +5,25 @@
  */
 package pos.java.pizzaria.repository;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import pos.java.pizzaria.model.Ingrediente;
 
 /**
  *
  * @author leonam
  */
-public class IngredienteRepository {
-    
-     private EntityManager manager;
+public class IngredienteRepository extends CommonRepository<Ingrediente> {
 
     public IngredienteRepository(EntityManager manager) {
-        this.manager = manager;
-    }
-    
-    public void adicionar(Ingrediente ingrediente) {
-        this.manager.persist(ingrediente);
+        super(manager);
     }
 
-    
+    @Override
+    public List<Ingrediente> listar() {
+        TypedQuery<Ingrediente> query = manager.createQuery("select p from Ingrediente p", Ingrediente.class);
+        return query.getResultList();
+    }
+
 }

@@ -5,24 +5,25 @@
  */
 package pos.java.pizzaria.repository;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import pos.java.pizzaria.model.Categoria;
 
 /**
  *
  * @author leonam
  */
-public class CategoriaRepository {
-    
-    private EntityManager manager;
+public class CategoriaRepository extends CommonRepository<Categoria> {
 
     public CategoriaRepository(EntityManager manager) {
-        this.manager = manager;
-    }
-    
-    public void adicionar(Categoria categoria) {
-        this.manager.persist(categoria);
+        super(manager);
     }
 
-    
+    @Override
+    public List<Categoria> listar() {
+        TypedQuery<Categoria> query = manager.createQuery("select p from Categoria p", Categoria.class);
+        return query.getResultList();
+    }
+
 }

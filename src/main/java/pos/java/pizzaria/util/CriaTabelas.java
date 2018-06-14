@@ -5,10 +5,8 @@
  */
 package pos.java.pizzaria.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -56,11 +54,11 @@ public class CriaTabelas {
         produtos.add(p1);
         produtos.add(p2);
 
-        Ingrediente i1 = new Ingrediente("Frango");
-        Ingrediente i2 = new Ingrediente("Farinha de rosca");
+        Ingrediente i1 = new Ingrediente("Frango", p1);
+        Ingrediente i2 = new Ingrediente("Farinha de rosca", p1);
 
-        Ingrediente i3 = new Ingrediente("Queijo");
-        Ingrediente i4 = new Ingrediente("Oregano");
+        Ingrediente i3 = new Ingrediente("Queijo", p2);
+        Ingrediente i4 = new Ingrediente("Oregano", p2);
 
         Cliente cliente = new Cliente(997979784, "Ricardo");
         Endereco endereco = new Endereco("Rua oliveiros", 17, "Perto do Shopping", cliente);
