@@ -70,9 +70,9 @@ public class CriaTabelas {
 
         List<Pedido> pedidos = new ArrayList();
         Pedido pedido = new Pedido(cliente, endereco, true, 23, 5, 70, 10,
-                new java.sql.Date(System.currentTimeMillis()), new java.sql.Date(System.currentTimeMillis()), 1);
+                new java.sql.Date(System.currentTimeMillis()), new java.sql.Timestamp(System.currentTimeMillis()), "PREPARANDO");
         Pedido pedido2 = new Pedido(cliente, endereco, true, 23, 5, 70, 10,
-                new java.sql.Date(System.currentTimeMillis()), new java.sql.Date(System.currentTimeMillis()), 1);
+                new java.sql.Date(System.currentTimeMillis()),new java.sql.Timestamp(System.currentTimeMillis()), "PREPARANDO");
         pedidos.add(pedido);
         pedidos.add(pedido2);
 

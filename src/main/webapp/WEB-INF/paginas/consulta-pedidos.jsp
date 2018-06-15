@@ -29,16 +29,20 @@
                     <th>Taxa de Entrega</th>
                     <th>Troco</th>
                     <th>Valor</th>
+                    <th>Entrega</th>
+                    <th>Status</th>
                     <th>Produto(s)</th>
                     <th>Ações</th>
                 </tr>
                 <c:forEach items="${pedidos}" var="pedido">
                     <tr>
-                        <td>${pedido.data}</td>
+                        <td><fmt:formatDate value="${pedido.data}"
+                                        pattern="dd/MM/yyyy"/></td>
                         <td><fmt:setLocale value="pt_BR" />
                             <fmt:formatNumber type="currency" value="${pedido.desconto}" />
                         </td>
-                        <td>${pedido.hora}</td>
+                        <td><fmt:formatDate value="${pedido.hora}"
+                                        pattern="HH:mm:ss"/></td>
                         <td><fmt:setLocale value="pt_BR" />
                             <fmt:formatNumber type="currency" value="${pedido.taxa_entrega}" /></td>
                         <td><fmt:setLocale value="pt_BR" />
@@ -46,20 +50,21 @@
                         <td>
                             <fmt:setLocale value="pt_BR" />
                             <fmt:formatNumber type="currency" value="${(pedido.valor + pedido.taxa_entrega) - pedido.desconto}" /></td>
-                   
+                        <td>${pedido.entrega}</td>
+                        <td>${pedido.status}</td>
                         <td>
-                             <c:forEach items="${pedido.produtoPedidos}" var="produtoPedido">
-                            <a>${produtoPedido.produto.nome}.</a>
-                            <a>Qtd: ${produtoPedido.quantidade}.</a>
-                            <a>Obs.: ${produtoPedido.obs}</a><br>
-                               </c:forEach>
+                            <c:forEach items="${pedido.produtoPedidos}" var="produtoPedido">
+                                <a>${produtoPedido.produto.nome}.</a>
+                                <a>Qtd: ${produtoPedido.quantidade}.</a>
+                                <a>Obs.: ${produtoPedido.obs}</a><br>
+                            </c:forEach>
                         </td>
-                     
+
                         <td>
-                            <a><button>Editar</button></a>
+                            <a><button>Editar</button></a><br>
                             <form action="consulta-pedidos" method="post">
                                 <input type="hidden" name="pedido_id" value="${pedido.id}" />
-                            <a><button type="submit">Deletar</button></a>
+                                <a><button type="submit">Deletar</button></a>
                             </form>
                         </td>
                     </tr>
@@ -69,7 +74,7 @@
         <form action="cadastra-pedido" method="get">
             <input type="submit" value="Novo Pedido" />
         </form>
-    <br/><br/>
+        <br/><br/>
 
-</body>
+    </body>
 </html>

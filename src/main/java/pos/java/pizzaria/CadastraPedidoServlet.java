@@ -6,7 +6,10 @@
 package pos.java.pizzaria;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pos.java.pizzaria.form.PedidoForm;
 import pos.java.pizzaria.model.Cliente;
 import pos.java.pizzaria.model.Endereco;
 import pos.java.pizzaria.model.Pedido;
@@ -52,7 +56,7 @@ public class CadastraPedidoServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } finally {
-            manager.close();
+          //manager.close();
         }
 
     }
@@ -76,8 +80,10 @@ public class CadastraPedidoServlet extends HttpServlet {
             Cliente cliente = clienteRepository.encontrar(Cliente.class, "1");
             Endereco endereco = enderecoRepository.encontrar(Endereco.class, "1");
 
-            Pedido pedido = new Pedido(cliente, endereco, true, 23, 5, 70, 10,
-                    new java.sql.Date(System.currentTimeMillis()), new java.sql.Date(System.currentTimeMillis()), 1);
+            PedidoForm form = PedidoForm.fromRequest(request);
+            Pedido pedido = form.toPedido();
+            pedido.setCliente(cliente);
+            pedido.setEndereco(endereco);
 
             ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, 5, "Bem quente, por favor.");
 
@@ -85,18 +91,19 @@ public class CadastraPedidoServlet extends HttpServlet {
 
             pedidos.beginTransatcion();
             pedidos.adicionar(pedido);
+            form = null;
             pedidos.commitTransaction();
 
             List<Pedido> todosPedidos = pedidos.listar();
             manager.close();
             request.setAttribute("pedidos", todosPedidos);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/consulta-pedidos.jsp");
-            dispatcher.forward(request, response);
+            response.sendRedirect("/pizzaria/consulta-pedidos");
 
+        } catch (ParseException ex) {
+            Logger.getLogger(CadastraPedidoServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            manager.close();
+            //manager.close();
         }
 
     }

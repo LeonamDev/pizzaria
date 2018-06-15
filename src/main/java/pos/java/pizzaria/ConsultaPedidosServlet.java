@@ -8,7 +8,6 @@ package pos.java.pizzaria;
 import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,9 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pos.java.pizzaria.model.Pedido;
-import pos.java.pizzaria.model.Produto;
 import pos.java.pizzaria.repository.PedidoRepository;
-import pos.java.pizzaria.repository.ProdutoRepository;
 import pos.java.pizzaria.util.JpaUtil;
 
 /**
@@ -36,14 +33,11 @@ public class ConsultaPedidosServlet extends HttpServlet {
         EntityManager manager = JpaUtil.getEntityManager();
 
         PedidoRepository pedidos = new PedidoRepository(manager);
-        ProdutoRepository produtos = new ProdutoRepository(manager);
 
         try {
             List<Pedido> todosPedidos = pedidos.listar();
-            List<Produto> todosProdutos = produtos.listar();
 
             request.setAttribute("pedidos", todosPedidos);
-            request.setAttribute("produtos", todosProdutos);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
                     "/WEB-INF/paginas/consulta-pedidos.jsp");
@@ -68,15 +62,16 @@ public class ConsultaPedidosServlet extends HttpServlet {
         pedidos.remover(pedido);
         pedidos.commitTransaction();
 
-        List<Pedido> todosPedidos = pedidos.listar();
-          manager.close();
-        request.setAttribute("pedidos", todosPedidos);
+        try {
+            List<Pedido> todosPedidos = pedidos.listar();
+            request.setAttribute("pedidos", todosPedidos);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher(
-                "/WEB-INF/paginas/consulta-pedidos.jsp");
-        dispatcher.forward(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher(
+                    "/WEB-INF/paginas/consulta-pedidos.jsp");
+            dispatcher.forward(request, response);
+        } finally {
 
-      
+        }
 
     }
 

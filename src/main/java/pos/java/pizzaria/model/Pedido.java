@@ -5,7 +5,9 @@
  */
 package pos.java.pizzaria.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -35,7 +37,7 @@ public class Pedido {
     private Cliente cliente;
     
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
-    private Set<ProdutoPedido> produtoPedidos = new HashSet<>();
+    private  Set<ProdutoPedido> produtoPedidos = new HashSet<>();
     
     @ManyToOne
     @JoinColumn(name = "endereco_id")
@@ -46,14 +48,14 @@ public class Pedido {
     private double valor;
     private double troco;
     private java.sql.Date data;
-    private java.sql.Date hora;
-    private int status;
+    private java.sql.Timestamp hora;
+    private String status;
     
     public Pedido(){
         
     }
 
-    public Pedido( Cliente cliente, Endereco endereco, boolean entrega, double desconto, double taxa_entrega, double valor, double troco, java.sql.Date data, java.sql.Date hora, int status) {
+    public Pedido( Cliente cliente, Endereco endereco, boolean entrega, double desconto, double taxa_entrega, double valor, double troco, java.sql.Date data, java.sql.Timestamp hora, String status) {
         
         this.cliente = cliente;
         this.endereco = endereco;
@@ -83,7 +85,7 @@ public class Pedido {
         this.cliente = cliente;
     }
 
-    public Set<ProdutoPedido> getProdutoPedidos() {
+    public  Set<ProdutoPedido> getProdutoPedidos() {
         return produtoPedidos;
     }
 
@@ -147,21 +149,22 @@ public class Pedido {
         this.data = data;
     }
 
-    public java.util.Date getHora() {
+    public java.sql.Timestamp getHora() {
         return hora;
     }
 
-    public void setHora(java.sql.Date hora) {
+    public void setHora(java.sql.Timestamp hora) {
         this.hora = hora;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
+
     
     
 }
