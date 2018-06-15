@@ -66,7 +66,7 @@
                 </c:forEach>
             </table>
         </c:if><br>
-        <form action="consulta-pedidos" method="post">
+        <form action="cadastra-pedido" method="get">
             <input type="submit" value="Novo Pedido" />
         </form>
     <br/><br/>

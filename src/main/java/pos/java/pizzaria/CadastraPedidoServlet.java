@@ -8,15 +8,19 @@ package pos.java.pizzaria;
 import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pos.java.pizzaria.model.Cliente;
+import pos.java.pizzaria.model.Endereco;
 import pos.java.pizzaria.model.Pedido;
 import pos.java.pizzaria.model.Produto;
+import pos.java.pizzaria.model.ProdutoPedido;
+import pos.java.pizzaria.repository.ClienteRepository;
+import pos.java.pizzaria.repository.EnderecoRepository;
 import pos.java.pizzaria.repository.PedidoRepository;
 import pos.java.pizzaria.repository.ProdutoRepository;
 import pos.java.pizzaria.util.JpaUtil;
@@ -25,8 +29,8 @@ import pos.java.pizzaria.util.JpaUtil;
  *
  * @author leonam
  */
-@WebServlet("/consulta-pedidos")
-public class ConsultaPedidosServlet extends HttpServlet {
+@WebServlet("/cadastra-pedido")
+public class CadastraPedidoServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,18 +39,16 @@ public class ConsultaPedidosServlet extends HttpServlet {
             throws ServletException, IOException {
         EntityManager manager = JpaUtil.getEntityManager();
 
-        PedidoRepository pedidos = new PedidoRepository(manager);
         ProdutoRepository produtos = new ProdutoRepository(manager);
 
         try {
-            List<Pedido> todosPedidos = pedidos.listar();
+
             List<Produto> todosProdutos = produtos.listar();
 
-            request.setAttribute("pedidos", todosPedidos);
             request.setAttribute("produtos", todosProdutos);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/consulta-pedidos.jsp");
+                    "/WEB-INF/paginas/cadastra-pedido.jsp");
             dispatcher.forward(request, response);
 
         } finally {
@@ -62,21 +64,40 @@ public class ConsultaPedidosServlet extends HttpServlet {
         EntityManager manager = JpaUtil.getEntityManager();
         PedidoRepository pedidos = new PedidoRepository(manager);
 
-        Pedido pedido = pedidos.encontrar(Pedido.class, request.getParameter("pedido_id"));
+        ClienteRepository clienteRepository = new ClienteRepository(manager);
+        EnderecoRepository enderecoRepository = new EnderecoRepository(manager);
 
-        pedidos.beginTransatcion();
-        pedidos.remover(pedido);
-        pedidos.commitTransaction();
+        try {
 
-        List<Pedido> todosPedidos = pedidos.listar();
-          manager.close();
-        request.setAttribute("pedidos", todosPedidos);
+            ProdutoRepository produtoRepository = new ProdutoRepository(manager);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher(
-                "/WEB-INF/paginas/consulta-pedidos.jsp");
-        dispatcher.forward(request, response);
+            Produto p1 = produtoRepository.encontrar(Produto.class, "1");
 
-      
+            Cliente cliente = clienteRepository.encontrar(Cliente.class, "1");
+            Endereco endereco = enderecoRepository.encontrar(Endereco.class, "1");
+
+            Pedido pedido = new Pedido(cliente, endereco, true, 23, 5, 70, 10,
+                    new java.sql.Date(System.currentTimeMillis()), new java.sql.Date(System.currentTimeMillis()), 1);
+
+            ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, 5, "Bem quente, por favor.");
+
+            p1.getProdutoPedidos().add(produtoPedido);
+
+            pedidos.beginTransatcion();
+            pedidos.adicionar(pedido);
+            pedidos.commitTransaction();
+
+            List<Pedido> todosPedidos = pedidos.listar();
+            manager.close();
+            request.setAttribute("pedidos", todosPedidos);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher(
+                    "/WEB-INF/paginas/consulta-pedidos.jsp");
+            dispatcher.forward(request, response);
+
+        } finally {
+            manager.close();
+        }
 
     }
 

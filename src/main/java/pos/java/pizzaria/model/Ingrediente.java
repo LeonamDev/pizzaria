@@ -34,9 +34,8 @@ public class Ingrediente {
         
     }
 
-    public Ingrediente(String nome, Produto produto) {
+    public Ingrediente(String nome) {
         this.nome = nome;
-        this.produto = produto;
     }
 
     public long getId() {

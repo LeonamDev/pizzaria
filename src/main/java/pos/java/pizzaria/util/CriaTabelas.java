@@ -53,11 +53,11 @@ public class CriaTabelas {
         produtos.add(p1);
         produtos.add(p2);
 
-        Ingrediente i1 = new Ingrediente("Frango", p1);
-        Ingrediente i2 = new Ingrediente("Farinha de rosca", p1);
+        Ingrediente i1 = new Ingrediente("Frango");
+        Ingrediente i2 = new Ingrediente("Farinha de rosca");
 
-        Ingrediente i3 = new Ingrediente("Queijo", p2);
-        Ingrediente i4 = new Ingrediente("Oregano", p2);
+        Ingrediente i3 = new Ingrediente("Queijo");
+        Ingrediente i4 = new Ingrediente("Oregano");
 
         Cliente cliente = new Cliente(997979784, "Ricardo");
         Endereco endereco = new Endereco("Rua oliveiros", 17, "Perto do Shopping", cliente);
@@ -77,10 +77,16 @@ public class CriaTabelas {
         pedidos.add(pedido2);
 
         ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, 5, "Bem quente, por favor.");
-        ProdutoPedido produtoPedido2 = new ProdutoPedido(p2, pedido2, 7, "Com bastante queijo!");
+        ProdutoPedido produtoPedido2 = new ProdutoPedido(p2, pedido, 7, "Com bastante queijo!");
         
+        ProdutoPedido produtoPedido3 = new ProdutoPedido(p1, pedido2, 7, "Com bastante queijo!");
+        ProdutoPedido produtoPedido4 = new ProdutoPedido(p2, pedido2, 7, "Com bastante queijo!");
+
         p1.getProdutoPedidos().add(produtoPedido);
         p2.getProdutoPedidos().add(produtoPedido2);
+                
+        p1.getProdutoPedidos().add(produtoPedido3); 
+        p2.getProdutoPedidos().add(produtoPedido4);
 
         try {
             trx.begin();
@@ -122,7 +128,7 @@ public class CriaTabelas {
 
         }
 
-       /* PedidoRepository pedidoRepository = new PedidoRepository(manager);
+        /* PedidoRepository pedidoRepository = new PedidoRepository(manager);
 
         List<Pedido> pedids = pedidoRepository.listar();
 
@@ -134,7 +140,7 @@ public class CriaTabelas {
             }
 
         }
-        */
+         */
     }
 
 }
