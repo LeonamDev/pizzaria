@@ -6,6 +6,7 @@
 package pos.java.pizzaria.model;
 
 import java.io.Serializable;
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "produto_pedido")
+@Cacheable(false)
 public class ProdutoPedido implements Serializable {
     
     @Id

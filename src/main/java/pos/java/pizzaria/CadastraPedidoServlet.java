@@ -56,7 +56,7 @@ public class CadastraPedidoServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } finally {
-          //manager.close();
+            manager.close();
         }
 
     }
@@ -94,16 +94,12 @@ public class CadastraPedidoServlet extends HttpServlet {
             form = null;
             pedidos.commitTransaction();
 
-            List<Pedido> todosPedidos = pedidos.listar();
-            manager.close();
-            request.setAttribute("pedidos", todosPedidos);
-
             response.sendRedirect("/pizzaria/consulta-pedidos");
 
         } catch (ParseException ex) {
             Logger.getLogger(CadastraPedidoServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            //manager.close();
+            manager.close();
         }
 
     }

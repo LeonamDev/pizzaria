@@ -13,9 +13,9 @@
         </c:if>
         <form action="cadastra-pedido" method="post">
             Entrega:
-            <select>
-                <option name="entrega" value="true">Sim</option>
-                <option name="entrega" value="false">Não</option>
+            <select name="entrega">
+                <option  value="true">Sim</option>
+                <option  value="false">Não</option>
             </select><br>
             Valor do Desconto:
             <input type="text" name="desconto" size="8"
@@ -30,8 +30,11 @@
             <input type="text" name="troco" size="8"
                    value="${form.troco}" /><br/>
             Estatus do Pedido:
-            <input type="text" name="status" size="8"
-                   value="${form.status}" /><br/><br>
+            <select name="status">
+                <option  value="PREPARANDO">PREPARANDO</option>
+                <option  value="SAIU PARA ENTREGA">SAIU PARA ENTREGA</option>
+                <option  value="ENTREGUE">ENTREGUE</option>
+            </select><br><br/><br>
             <h3>Escolha o(s) produto(s):</h3>
             <c:forEach items="${produtos}" var="produto">
                 <input type="checkbox" name="produto" value="${produto.id}">${produto.nome}.
