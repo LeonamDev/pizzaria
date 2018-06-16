@@ -43,13 +43,16 @@ public class CadastraPedidoServlet extends HttpServlet {
             throws ServletException, IOException {
         EntityManager manager = JpaUtil.getEntityManager();
 
-        ProdutoRepository produtos = new ProdutoRepository(manager);
+        ProdutoRepository produtoRepository = new ProdutoRepository(manager);
+        ClienteRepository clienteRepository = new ClienteRepository(manager);
 
         try {
 
-            List<Produto> todosProdutos = produtos.listar();
+            List<Produto> todosProdutos = produtoRepository.listar();
+             List<Cliente> todosClientes = clienteRepository.listar();
 
             request.setAttribute("produtos", todosProdutos);
+            request.setAttribute("clientes", todosClientes);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
                     "/WEB-INF/paginas/cadastra-pedido.jsp");
@@ -78,7 +81,7 @@ public class CadastraPedidoServlet extends HttpServlet {
             Produto p1 = produtoRepository.encontrar(Produto.class, "1");
 
             Cliente cliente = clienteRepository.encontrar(Cliente.class, "1");
-            Endereco endereco = enderecoRepository.encontrar(Endereco.class, "1");
+            Endereco endereco = enderecoRepository.encontrar(Endereco.class, request.getParameter("enderecoId"));
 
             PedidoForm form = PedidoForm.fromRequest(request);
             Pedido pedido = form.toPedido();

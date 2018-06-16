@@ -32,6 +32,8 @@
                     <th>Entrega</th>
                     <th>Status</th>
                     <th>Produto(s)</th>
+                    <th>Cliente</th>
+                    <th>Endereco</th>
                     <th>Ações</th>
                 </tr>
                 <c:forEach items="${pedidos}" var="pedido">
@@ -59,6 +61,8 @@
                                 <a>Obs.: ${produtoPedido.obs}</a><br>
                             </c:forEach>
                         </td>
+                        <td>${pedido.endereco.cliente.nome}</td>
+                        <td>${pedido.endereco.rua} - ${pedido.endereco.numero}/${pedido.endereco.referencia}</td>
 
                         <td>
                             <a><button>Editar</button></a><br>

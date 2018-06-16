@@ -12,6 +12,17 @@
             <strong>${mensagem}</strong><br/><br/>
         </c:if>
         <form action="cadastra-pedido" method="post">
+            <h3>Clientes:</h3>
+            <c:forEach items="${clientes}" var="cliente">
+                <b><p>${cliente.nome}</p></b>
+                <ol>
+                    <c:forEach items="${cliente.enderecos}" var="endereco">
+                        <li><input type="radio" id="${endereco.id}"
+                                   name="enderecoId" value="${endereco.id}">${endereco.rua} - ${endereco.numero}/${endereco.referencia}. Tel.: ${cliente.telefone}</li>
+                        </c:forEach>
+                </ol>
+            </c:forEach><br>
+
             Entrega:
             <select name="entrega">
                 <option  value="true">Sim</option>
@@ -43,8 +54,6 @@
             </c:forEach><br>
             <input type="submit" value="Pedir">
 
-
         </form>
-
     </body>
 </html>
