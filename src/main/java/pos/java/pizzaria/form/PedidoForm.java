@@ -5,13 +5,13 @@
  */
 package pos.java.pizzaria.form;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import pos.java.pizzaria.model.Pedido;
+import pos.java.pizzaria.service.ServiceException;
 
 /**
  *
@@ -48,45 +48,58 @@ public class PedidoForm {
         return form;
     }
 
-    public Pedido toPedido() throws ParseException {
+    public Pedido toPedido() throws ParseException, ServiceException {
         Pedido pedido = new Pedido();
 
         pedido.setData(new java.sql.Date(System.currentTimeMillis()));
-        pedido.setHora( new java.sql.Timestamp(System.currentTimeMillis()));
+        pedido.setHora(new java.sql.Timestamp(System.currentTimeMillis()));
         pedido.setStatus(this.status);
+        pedido.setEntrega(Boolean.valueOf(this.entrega));
 
-        if (this.getEntrega() != null
-                && !this.getEntrega().equals("")) {
-            pedido.setEntrega(
-                    Boolean.valueOf(this.entrega));
+        try {
+            if (this.getDesconto() != null
+                    && !this.getDesconto().equals("")) {
+                pedido.setDesconto(
+                        DECIMAL_FORMAT.parse(
+                                this.getDesconto()).doubleValue());
+            }
+        } catch (ParseException e) {
+            throw new ServiceException(
+                    "Informe o preço do desconto corretamente.");
+        }
+        try {
+            if (this.getTaxa_entrega() != null
+                    && !this.getTaxa_entrega().equals("")) {
+                pedido.setTaxa_entrega(
+                        DECIMAL_FORMAT.parse(
+                                this.getTaxa_entrega()).doubleValue());
+            }
+        } catch (ParseException e) {
+            throw new ServiceException(
+                    "Informe a taxa de entrega corretamente.");
         }
 
-        if (this.getDesconto() != null
-                && !this.getDesconto().equals("")) {
-            pedido.setDesconto(
-                    DECIMAL_FORMAT.parse(
-                            this.getDesconto()).doubleValue());
+        try {
+            if (this.getValor() != null
+                    && !this.getValor().equals("")) {
+                pedido.setValor(
+                        DECIMAL_FORMAT.parse(
+                                this.getValor()).doubleValue());
+            }
+        } catch (ParseException e) {
+            throw new ServiceException(
+                    "Informe o valor corretamente.");
         }
-
-        if (this.getTaxa_entrega() != null
-                && !this.getTaxa_entrega().equals("")) {
-            pedido.setTaxa_entrega(
-                    DECIMAL_FORMAT.parse(
-                            this.getTaxa_entrega()).doubleValue());
-        }
-
-        if (this.getValor() != null
-                && !this.getValor().equals("")) {
-            pedido.setValor(
-                    DECIMAL_FORMAT.parse(
-                            this.getValor()).doubleValue());
-        }
-
-        if (this.getTroco() != null
-                && !this.getTroco().equals("")) {
-            pedido.setTroco(
-                    DECIMAL_FORMAT.parse(
-                            this.getTroco()).doubleValue());
+        try {
+            if (this.getTroco() != null
+                    && !this.getTroco().equals("")) {
+                pedido.setTroco(
+                        DECIMAL_FORMAT.parse(
+                                this.getTroco()).doubleValue());
+            }
+        } catch (ParseException e) {
+            throw new ServiceException(
+                    "Informe o valor do troco corretamente.");
         }
 
         return pedido;

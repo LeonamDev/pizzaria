@@ -41,8 +41,7 @@ public abstract class CommonRepository<T> {
         manager.remove(t);
     }
 
-    public T encontrar(Class<T> c, String idd) {
-        Long id = Long.parseLong(idd);
+    public T encontrar(Class<T> c, Long id) {
         return manager.find(c, id);
     }
 

@@ -52,11 +52,12 @@ public class ConsultaPedidosServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+       
 
         EntityManager manager = JpaUtil.getEntityManager();
         PedidoRepository pedidos = new PedidoRepository(manager);
 
-        Pedido pedido = pedidos.encontrar(Pedido.class, request.getParameter("pedido_id"));
+        Pedido pedido = pedidos.encontrar(Pedido.class, new Long(request.getParameter("pedido_id")));
 
         pedidos.beginTransatcion();
         pedidos.remover(pedido);

@@ -48,8 +48,9 @@
             </select><br><br/><br>
             <h3>Escolha o(s) produto(s):</h3>
             <c:forEach items="${produtos}" var="produto">
-                <input type="checkbox" name="produto" value="${produto.id}">${produto.nome}.
-                Qtd: <input id="number" type="number" name="qtd" value="0" min="0" max="5"><br>
+                <input type="checkbox" name="produtoId" value="${produto.id}">${produto.nome}.
+                Qtd: <input id="${produto.id}" type="number" name="qtd_${produto.id}" value="0" min="0" max="5"><br>
+                Obs: <input id="${produto.id}" type="text" name="obs_${produto.id}" value=""><br>
 
             </c:forEach><br>
             <input type="submit" value="Pedir">

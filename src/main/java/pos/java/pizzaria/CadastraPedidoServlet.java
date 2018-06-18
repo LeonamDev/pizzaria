@@ -27,6 +27,7 @@ import pos.java.pizzaria.repository.ClienteRepository;
 import pos.java.pizzaria.repository.EnderecoRepository;
 import pos.java.pizzaria.repository.PedidoRepository;
 import pos.java.pizzaria.repository.ProdutoRepository;
+import pos.java.pizzaria.service.ServiceException;
 import pos.java.pizzaria.util.JpaUtil;
 
 /**
@@ -49,7 +50,7 @@ public class CadastraPedidoServlet extends HttpServlet {
         try {
 
             List<Produto> todosProdutos = produtoRepository.listar();
-             List<Cliente> todosClientes = clienteRepository.listar();
+            List<Cliente> todosClientes = clienteRepository.listar();
 
             request.setAttribute("produtos", todosProdutos);
             request.setAttribute("clientes", todosClientes);
@@ -76,30 +77,36 @@ public class CadastraPedidoServlet extends HttpServlet {
 
         try {
 
+            String[] produtoIDs;
+
+            produtoIDs = request.getParameterValues("produtoId");
+
             ProdutoRepository produtoRepository = new ProdutoRepository(manager);
-
-            Produto p1 = produtoRepository.encontrar(Produto.class, "1");
-
-            Cliente cliente = clienteRepository.encontrar(Cliente.class, "1");
-            Endereco endereco = enderecoRepository.encontrar(Endereco.class, request.getParameter("enderecoId"));
-
             PedidoForm form = PedidoForm.fromRequest(request);
             Pedido pedido = form.toPedido();
+
+            Endereco endereco = enderecoRepository.encontrar(Endereco.class, new Long(request.getParameter("enderecoId")));
+            Cliente cliente = clienteRepository.encontrar(Cliente.class, endereco.getCliente().getId());
+
             pedido.setCliente(cliente);
             pedido.setEndereco(endereco);
+            for (String produtoId : produtoIDs) {
+                Produto p1 = produtoRepository.encontrar(Produto.class, new Long(produtoId));
+                ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, Integer.parseInt(request.getParameter("qtd_" + produtoId)), request.getParameter("obs_" + produtoId));
 
-            ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, 5, "Bem quente, por favor.");
+                p1.getProdutoPedidos().add(produtoPedido);
 
-            p1.getProdutoPedidos().add(produtoPedido);
+                pedidos.beginTransatcion();
+                pedidos.adicionar(pedido);
+                pedidos.commitTransaction();
 
-            pedidos.beginTransatcion();
-            pedidos.adicionar(pedido);
-            form = null;
-            pedidos.commitTransaction();
+            }
 
             response.sendRedirect("/pizzaria/consulta-pedidos");
 
         } catch (ParseException ex) {
+            Logger.getLogger(CadastraPedidoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServiceException ex) {
             Logger.getLogger(CadastraPedidoServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             manager.close();
