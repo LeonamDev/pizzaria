@@ -6,6 +6,7 @@
 package pos.java.pizzaria;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,27 +35,29 @@ import pos.java.pizzaria.util.JpaUtil;
  *
  * @author leonam
  */
-@WebServlet("/cadastra-pedido")
-public class CadastraPedidoServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
+@WebServlet("/edita-pedido")
+public class EditaPedidoServelet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         EntityManager manager = JpaUtil.getEntityManager();
 
+        PedidoRepository pedidos = new PedidoRepository(manager);
         ProdutoRepository produtoRepository = new ProdutoRepository(manager);
         ClienteRepository clienteRepository = new ClienteRepository(manager);
 
         try {
+            Pedido pedido = pedidos.encontrar(Pedido.class, new Long(request.getParameter("pedido_id")));
 
             List<Produto> todosProdutos = produtoRepository.listar();
             List<Cliente> todosClientes = clienteRepository.listar();
 
+            request.setAttribute("form", pedido);
             request.setAttribute("produtos", todosProdutos);
             request.setAttribute("clientes", todosClientes);
-            request.setAttribute("action", "cadastra-pedido");
+            request.setAttribute("action", "edita-pedido");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
                     "/WEB-INF/paginas/cadastra-pedido.jsp");
@@ -69,49 +72,7 @@ public class CadastraPedidoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        EntityManager manager = JpaUtil.getEntityManager();
-        PedidoRepository pedidos = new PedidoRepository(manager);
-
-        ClienteRepository clienteRepository = new ClienteRepository(manager);
-        EnderecoRepository enderecoRepository = new EnderecoRepository(manager);
-
-        try {
-
-            String[] produtoIDs;
-
-            produtoIDs = request.getParameterValues("produtoId");
-
-            ProdutoRepository produtoRepository = new ProdutoRepository(manager);
-            PedidoForm form = PedidoForm.fromRequest(request);
-            Pedido pedido = form.toPedido();
-
-            Endereco endereco = enderecoRepository.encontrar(Endereco.class, new Long(request.getParameter("enderecoId")));
-            Cliente cliente = clienteRepository.encontrar(Cliente.class, endereco.getCliente().getId());
-
-            pedido.setCliente(cliente);
-            pedido.setEndereco(endereco);
-            for (String produtoId : produtoIDs) {
-                Produto p1 = produtoRepository.encontrar(Produto.class, new Long(produtoId));
-                ProdutoPedido produtoPedido = new ProdutoPedido(p1, pedido, Integer.parseInt(request.getParameter("qtd_" + produtoId)), request.getParameter("obs_" + produtoId));
-
-                p1.getProdutoPedidos().add(produtoPedido);
-
-                pedidos.beginTransatcion();
-                pedidos.adicionar(pedido);
-                pedidos.commitTransaction();
-
-            }
-
-            response.sendRedirect("/pizzaria/consulta-pedidos");
-
-        } catch (ParseException ex) {
-            Logger.getLogger(CadastraPedidoServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServiceException ex) {
-            Logger.getLogger(CadastraPedidoServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            manager.close();
-        }
+        
 
     }
 

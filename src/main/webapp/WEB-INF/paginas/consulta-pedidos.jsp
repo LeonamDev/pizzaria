@@ -64,8 +64,11 @@
                         <td>${pedido.endereco.cliente.nome}</td>
                         <td>${pedido.endereco.rua} - ${pedido.endereco.numero}/${pedido.endereco.referencia}</td>
 
-                        <td>
-                            <a><button>Editar</button></a><br>
+                        <td><form action="edita-pedido" method="get">
+                                <input type="hidden" name="pedido_id" value="${pedido.id}" />
+                                <a><button>Editar</button></a><br>
+                            </form>
+
                             <form action="consulta-pedidos" method="post">
                                 <input type="hidden" name="pedido_id" value="${pedido.id}" />
                                 <a><button type="submit">Deletar</button></a>
