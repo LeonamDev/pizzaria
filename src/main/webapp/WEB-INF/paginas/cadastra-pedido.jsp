@@ -41,30 +41,26 @@
             Troco:
             <input type="text" name="troco" size="8"
                    value="${form.troco}" /><br/>
+            
             Estatus do Pedido:
             <select name="status">
                 <option  value="PREPARANDO" ${form.status == "PREPARANDO" ? 'selected="selected"' : ''}>PREPARANDO</option>
                 <option  value="SAIU PARA ENTREGA" ${form.status == "SAIU PARA ENTREGA" ? 'selected="selected"' : ''}>SAIU PARA ENTREGA</option>
                 <option  value="ENTREGUE" ${form.status == "ENTREGUE" ? 'selected="selected"' : ''}>ENTREGUE</option>
             </select><br><br/><br>
+            
             <h3>Escolha o(s) produto(s):</h3>
-
-            <c:forEach items="${produtos}" var="produto">
-                <c:forEach items="${form.produtoPedidos}" var="produtoPedido">
-                    <c:choose>
-                        <c:when test="${produto.id == produtoPedido.produto.id}">
-                            <input type="checkbox" name="produtoId" value="${produtoPedido.produto.id}" checked>${produto.nome}.
-                            Qtd: <input id="${produtoPedido.produto.id}" type="number" name="qtd_${produtoPedido.produto.id}" value="${produtoPedido.quantidade}" min="0" max="5"><br>
-                            Obs: <input id="${produtoPedido.produto.id}" type="text" name="obs_${produtoPedido.produto.id}" value="${produtoPedido.obs}"><br><br>
-                        </c:when>
-                        <c:otherwise>
-                            <input type="checkbox" name="produtoId" value="${produto.id}" >${produto.nome}.
-                            Qtd: <input id="${produto.id}" type="number" name="qtd_${produto.id}" value="" min="0" max="5"><br>
-                            Obs: <input id="${produto.id}" type="text" name="obs_${produto.id}" value=""><br><br>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach><br>
+            <c:forEach items="${form.produtoPedidos}" var="produtoPedido">
+                <input type="checkbox" name="produtoId" value="${produtoPedido.produto.id}" checked>${produtoPedido.produto.nome}.
+                Qtd: <input id="${produtoPedido.produto.id}" type="number" name="qtd_${produtoPedido.produto.id}" value="${produtoPedido.quantidade}" min="0" max="5"><br>
+                Obs: <input id="${produtoPedido.produto.id}" type="text" name="obs_${produtoPedido.produto.id}" value="${produtoPedido.obs}"><br><br>
             </c:forEach><br>
+            <c:forEach items="${produtos}" var="produto">
+                <input type="checkbox" name="produtoId" value="${produto.id}" >${produto.nome}.
+                Qtd: <input id="${produto.id}" type="number" name="qtd_${produto.id}" value="" min="0" max="5"><br>
+                Obs: <input id="${produto.id}" type="text" name="obs_${produto.id}" value=""><br><br>
+            </c:forEach><br>
+            
             <input type="submit" value="Pedir">
         </form>
     </body>
