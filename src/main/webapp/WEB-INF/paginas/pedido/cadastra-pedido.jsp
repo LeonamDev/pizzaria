@@ -23,6 +23,7 @@
                     </c:forEach>
                 </ol>
             </c:forEach><br>
+             <input type="hidden" id="${form.id}" name="pedidoId" value="${form.id}">
 
             Entrega:
             <select name="entrega">

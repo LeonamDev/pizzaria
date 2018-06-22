@@ -40,7 +40,7 @@ public class ConsultaPedidosServlet extends HttpServlet {
             request.setAttribute("pedidos", todosPedidos);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/consulta-pedidos.jsp");
+                    "/WEB-INF/paginas/pedido/consulta-pedidos.jsp");
             dispatcher.forward(request, response);
 
         } finally {
@@ -68,7 +68,7 @@ public class ConsultaPedidosServlet extends HttpServlet {
             request.setAttribute("pedidos", todosPedidos);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/consulta-pedidos.jsp");
+                    "/WEB-INF/paginas/pedido/consulta-pedidos.jsp");
             dispatcher.forward(request, response);
         } finally {
 

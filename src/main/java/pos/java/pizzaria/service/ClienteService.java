@@ -5,6 +5,8 @@
  */
 package pos.java.pizzaria.service;
 
+import java.util.List;
+import javax.persistence.TypedQuery;
 import pos.java.pizzaria.model.Cliente;
 import pos.java.pizzaria.repository.ClienteRepository;
 
@@ -13,7 +15,7 @@ import pos.java.pizzaria.repository.ClienteRepository;
  * @author leonam
  */
 public class ClienteService {
-    
+
     private ClienteRepository clienteRepository;
 
     public ClienteService(ClienteRepository clienteRepository) {
@@ -24,5 +26,8 @@ public class ClienteService {
         this.clienteRepository.adicionar(cliente);
     }
 
-    
+    public List<Cliente> listar() {
+        return this.clienteRepository.listar();
+    }
+
 }

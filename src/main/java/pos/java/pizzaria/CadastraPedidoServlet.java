@@ -57,7 +57,7 @@ public class CadastraPedidoServlet extends HttpServlet {
             request.setAttribute("action", "cadastra-pedido");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/cadastra-pedido.jsp");
+                    "/WEB-INF/paginas/pedido/cadastra-pedido.jsp");
             dispatcher.forward(request, response);
 
         } finally {
