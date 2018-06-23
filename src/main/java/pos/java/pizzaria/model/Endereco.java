@@ -7,6 +7,8 @@ package pos.java.pizzaria.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "endereco")
+@Cacheable(false)
 public class Endereco {
     
     @Id
@@ -35,7 +38,7 @@ public class Endereco {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     
-    @OneToMany(mappedBy = "endereco")
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidos = new ArrayList();
     
     

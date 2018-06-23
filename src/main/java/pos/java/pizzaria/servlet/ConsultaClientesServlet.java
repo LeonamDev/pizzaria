@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pos.java.pizzaria;
+package pos.java.pizzaria.servlet;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +46,26 @@ public class ConsultaClientesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        EntityManager manager = JpaUtil.getEntityManager();
+        ClienteService clienteService = new ClienteService(new ClienteRepository(manager));
+        
+        ClienteRepository clienteRepository= new ClienteRepository(manager);
+        Cliente cliente = clienteRepository.encontrar(Cliente.class, new Long(request.getParameter("clienteId")));
+        
+        clienteRepository.beginTransatcion();
+        clienteRepository.remover(cliente);
+        clienteRepository.commitTransaction();
+        
+        
+        
+
+        List<Cliente> todosClientes = clienteService.listar();
+        request.setAttribute("clientes", todosClientes);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher(
+                "/WEB-INF/paginas/cliente/consulta-clientes.jsp");
+        dispatcher.forward(request, response);
 
     }
 

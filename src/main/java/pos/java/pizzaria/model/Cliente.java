@@ -7,7 +7,9 @@ package pos.java.pizzaria.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,10 +21,10 @@ import javax.persistence.Table;
 @Table(name = "cliente")
 public class Cliente extends Pessoa{
    
-   @OneToMany(mappedBy = "cliente")
+   @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Endereco> enderecos = new ArrayList();
    
-   @OneToMany(mappedBy = "cliente")
+   @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Pedido> pedidos = new ArrayList();
    private int telefone;
     
