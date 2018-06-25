@@ -5,12 +5,13 @@
  */
 package pos.java.pizzaria.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -26,9 +27,8 @@ public class Ingrediente {
     private long id;
     private String nome;
     
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
-    private Produto produto;
+    @ManyToMany(mappedBy = "ingredientes")
+    private Set<Produto> produtos = new HashSet<>();
     
     public Ingrediente(){
         
@@ -54,14 +54,15 @@ public class Ingrediente {
         this.nome = nome;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Set<Produto> getProdutos() {
+        return produtos;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setProdutos(Set<Produto> produtos) {
+        this.produtos = produtos;
     }
-    
+
+   
     
     
     
