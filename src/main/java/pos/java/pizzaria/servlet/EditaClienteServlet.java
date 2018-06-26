@@ -45,7 +45,7 @@ public class EditaClienteServlet extends HttpServlet {
                     "/WEB-INF/paginas/cliente/cadastra-cliente.jsp");
             dispatcher.forward(request, response);
         } catch (Exception e) {
-
+            System.err.println(e);
         } finally {
             manager.close();
         }
@@ -74,8 +74,9 @@ public class EditaClienteServlet extends HttpServlet {
             clienteRepository.editar(cliente);
             clienteRepository.commitTransaction();
 
-           response.sendRedirect("/pizzaria/consulta-clientes");
+            response.sendRedirect("/pizzaria/consulta-clientes");
         } catch (Exception e) {
+            System.err.println(e);
         } finally {
             manager.close();
         }

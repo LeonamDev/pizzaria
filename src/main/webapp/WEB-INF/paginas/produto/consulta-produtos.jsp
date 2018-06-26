@@ -28,6 +28,7 @@
                     <th>Preço</th>
                     <th>Categoria</th>
                     <th>Ingredientes</th>
+                    <th>Ações</th>
                 </tr>
                 <c:forEach items="${produtos}" var="produto">
                     <tr>

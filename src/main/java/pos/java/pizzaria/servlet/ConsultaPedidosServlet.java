@@ -43,6 +43,8 @@ public class ConsultaPedidosServlet extends HttpServlet {
                     "/WEB-INF/paginas/pedido/consulta-pedidos.jsp");
             dispatcher.forward(request, response);
 
+        } catch (Exception e) {
+            System.err.println(e);
         } finally {
             manager.close();
         }
@@ -52,7 +54,6 @@ public class ConsultaPedidosServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
 
         EntityManager manager = JpaUtil.getEntityManager();
         PedidoRepository pedidos = new PedidoRepository(manager);
@@ -70,8 +71,10 @@ public class ConsultaPedidosServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher(
                     "/WEB-INF/paginas/pedido/consulta-pedidos.jsp");
             dispatcher.forward(request, response);
+        } catch (Exception e) {
+            System.err.println(e);
         } finally {
-
+            manager.close();
         }
 
     }

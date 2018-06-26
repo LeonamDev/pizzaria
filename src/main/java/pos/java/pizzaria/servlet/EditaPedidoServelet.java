@@ -69,6 +69,8 @@ public class EditaPedidoServelet extends HttpServlet {
                     "/WEB-INF/paginas/pedido/cadastra-pedido.jsp");
             dispatcher.forward(request, response);
 
+        } catch (Exception e) {
+            System.err.println(e);
         } finally {
             manager.close();
         }

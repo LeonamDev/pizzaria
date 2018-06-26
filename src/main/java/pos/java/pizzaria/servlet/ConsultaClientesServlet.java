@@ -32,40 +32,49 @@ public class ConsultaClientesServlet extends HttpServlet {
 
         EntityManager manager = JpaUtil.getEntityManager();
         ClienteService clienteService = new ClienteService(new ClienteRepository(manager));
+        try {
+            List<Cliente> todosClientes = clienteService.listar();
 
-        List<Cliente> todosClientes = clienteService.listar();
+            request.setAttribute("clientes", todosClientes);
 
-        request.setAttribute("clientes", todosClientes);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher(
-                "/WEB-INF/paginas/cliente/consulta-clientes.jsp");
-        dispatcher.forward(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher(
+                    "/WEB-INF/paginas/cliente/consulta-clientes.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            manager.close();
+        }
 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         EntityManager manager = JpaUtil.getEntityManager();
         ClienteService clienteService = new ClienteService(new ClienteRepository(manager));
-        
-        ClienteRepository clienteRepository= new ClienteRepository(manager);
-        Cliente cliente = clienteRepository.encontrar(Cliente.class, new Long(request.getParameter("clienteId")));
-        
-        clienteRepository.beginTransatcion();
-        clienteRepository.remover(cliente);
-        clienteRepository.commitTransaction();
-        
-        
-        
 
-        List<Cliente> todosClientes = clienteService.listar();
-        request.setAttribute("clientes", todosClientes);
+        ClienteRepository clienteRepository = new ClienteRepository(manager);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher(
-                "/WEB-INF/paginas/cliente/consulta-clientes.jsp");
-        dispatcher.forward(request, response);
+        try {
+            Cliente cliente = clienteRepository.encontrar(Cliente.class, new Long(request.getParameter("clienteId")));
+
+            clienteRepository.beginTransatcion();
+            clienteRepository.remover(cliente);
+            clienteRepository.commitTransaction();
+
+            List<Cliente> todosClientes = clienteService.listar();
+            request.setAttribute("clientes", todosClientes);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher(
+                    "/WEB-INF/paginas/cliente/consulta-clientes.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            manager.close();
+        }
 
     }
 

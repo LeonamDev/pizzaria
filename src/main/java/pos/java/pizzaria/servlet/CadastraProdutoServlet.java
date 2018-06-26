@@ -6,6 +6,7 @@
 package pos.java.pizzaria.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,38 +14,41 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import pos.java.pizzaria.form.EnderecoForm;
-import pos.java.pizzaria.model.Cliente;
-import pos.java.pizzaria.model.Endereco;
-import pos.java.pizzaria.repository.ClienteRepository;
-import pos.java.pizzaria.repository.EnderecoRepository;
+import pos.java.pizzaria.form.ProdutoForm;
+import pos.java.pizzaria.model.Categoria;
+import pos.java.pizzaria.model.Ingrediente;
+import pos.java.pizzaria.model.Produto;
+import pos.java.pizzaria.repository.CategoriaRepository;
+import pos.java.pizzaria.repository.IngredienteRepository;
+import pos.java.pizzaria.repository.ProdutoRepository;
 import pos.java.pizzaria.util.JpaUtil;
 
 /**
  *
  * @author leonam
  */
-@WebServlet("/edita-endereco")
-public class EditaEnderecoServlet extends HttpServlet {
+@WebServlet("/cadastra-produto")
+public class CadastraProdutoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Long enderecoId = new Long(request.getParameter("enderecoId"));
-
         EntityManager manager = JpaUtil.getEntityManager();
-        EnderecoRepository enderecoRepository = new EnderecoRepository(manager);
+
+        CategoriaRepository categoriaRepository = new CategoriaRepository(manager);
+        IngredienteRepository ingredienteRepository = new IngredienteRepository(manager);
 
         try {
-            Endereco endereco = enderecoRepository.encontrar(Endereco.class, enderecoId);
+            List<Categoria> todasCategorias = categoriaRepository.listar();
+            List<Ingrediente> todosIngredientes = ingredienteRepository.listar();
 
-            request.setAttribute("action", "edita-endereco");
-            request.setAttribute("clienteId", endereco.getCliente().getId());
-            request.setAttribute("form", endereco);
+            request.setAttribute("action", "cadastra-produto");
+            request.setAttribute("categorias", todasCategorias);
+            request.setAttribute("ingredientes", todosIngredientes);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/endereco/cadastra-endereco.jsp");
+                    "/WEB-INF/paginas/produto/cadastra-produto.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
@@ -60,24 +64,24 @@ public class EditaEnderecoServlet extends HttpServlet {
             throws ServletException, IOException {
 
         EntityManager manager = JpaUtil.getEntityManager();
+        ProdutoRepository produtoRepository = new ProdutoRepository(manager);
+
         try {
 
-            EnderecoForm form = EnderecoForm.fromRequest(request);
-            Endereco endereco = form.toEndereco();
+            ProdutoForm form = ProdutoForm.fromRequest(request);
+            Produto produto = form.toProduto(manager);
 
-            EnderecoRepository enderecoRepository = new EnderecoRepository(manager);
+            produtoRepository.beginTransatcion();
+            produtoRepository.adicionar(produto);
+            produtoRepository.commitTransaction();
 
-            enderecoRepository.beginTransatcion();
-            enderecoRepository.editar(endereco);
-            enderecoRepository.commitTransaction();
+            response.sendRedirect("/pizzaria/consulta-produtos");
 
-            response.sendRedirect("/pizzaria/consulta-clientes");
         } catch (Exception e) {
             System.err.println(e);
         } finally {
             manager.close();
         }
-
     }
 
     @Override
