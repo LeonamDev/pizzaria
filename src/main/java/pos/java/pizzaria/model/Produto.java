@@ -40,7 +40,7 @@ public class Produto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
     
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.PERSIST })
     @JoinTable(
         name = "produto_ingrediente", 
         joinColumns = { @JoinColumn(name = "produto_id") }, 

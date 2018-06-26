@@ -5,6 +5,8 @@
  */
 package pos.java.pizzaria.service;
 
+import java.util.List;
+import pos.java.pizzaria.model.Cliente;
 import pos.java.pizzaria.model.Produto;
 import pos.java.pizzaria.repository.ProdutoRepository;
 
@@ -22,6 +24,10 @@ public class ProdutoService {
 
     public void cadastrar(Produto produto) {
         this.produtoRepository.adicionar(produto);
+    }
+    
+     public List<Produto> listar() {
+        return this.produtoRepository.listar();
     }
 
 }
