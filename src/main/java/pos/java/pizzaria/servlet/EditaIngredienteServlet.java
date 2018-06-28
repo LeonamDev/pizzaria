@@ -6,7 +6,6 @@
 package pos.java.pizzaria.servlet;
 
 import java.io.IOException;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,33 +13,35 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import pos.java.pizzaria.model.Pedido;
-import pos.java.pizzaria.repository.PedidoRepository;
+import pos.java.pizzaria.form.IngredienteForm;
+import pos.java.pizzaria.model.Ingrediente;
+import pos.java.pizzaria.repository.IngredienteRepository;
 import pos.java.pizzaria.util.JpaUtil;
 
 /**
  *
  * @author leonam
  */
-@WebServlet("/consulta-pedidos")
-public class ConsultaPedidosServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
+@WebServlet("/edita-ingrediente")
+public class EditaIngredienteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EntityManager manager = JpaUtil.getEntityManager();
 
-        PedidoRepository pedidos = new PedidoRepository(manager);
+        Long ingredienteId = new Long(request.getParameter("ingredienteId"));
+
+        EntityManager manager = JpaUtil.getEntityManager();
+        IngredienteRepository ingredienteRepository = new IngredienteRepository(manager);
 
         try {
-            List<Pedido> todosPedidos = pedidos.listar();
+            Ingrediente ingrediente = ingredienteRepository.encontrar(Ingrediente.class, ingredienteId);
 
-            request.setAttribute("pedidos", todosPedidos);
+            request.setAttribute("action", "edita-ingrediente");
+            request.setAttribute("form", ingrediente);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "/WEB-INF/paginas/pedido/consulta-pedidos.jsp");
+                    "/WEB-INF/paginas/ingrediente/cadastra-ingrediente.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
@@ -56,16 +57,19 @@ public class ConsultaPedidosServlet extends HttpServlet {
             throws ServletException, IOException {
 
         EntityManager manager = JpaUtil.getEntityManager();
-        PedidoRepository pedidos = new PedidoRepository(manager);
 
         try {
-            Pedido pedido = pedidos.encontrar(Pedido.class, new Long(request.getParameter("pedido_id")));
 
-            pedidos.beginTransatcion();
-            pedidos.remover(pedido);
-            pedidos.commitTransaction();
+            IngredienteForm form = IngredienteForm.fromRequest(request);
+            Ingrediente ingrediente = form.toIngrediente();
 
-            response.sendRedirect("/pizzaria/consulta-pedidos");
+            IngredienteRepository ingredienteRepository = new IngredienteRepository(manager);
+
+            ingredienteRepository.beginTransatcion();
+            ingredienteRepository.editar(ingrediente);
+            ingredienteRepository.commitTransaction();
+
+            response.sendRedirect("/pizzaria/consulta-ingredientes");
         } catch (Exception e) {
             System.err.println(e);
         } finally {

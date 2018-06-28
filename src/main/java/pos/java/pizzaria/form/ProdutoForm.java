@@ -119,7 +119,7 @@ public class ProdutoForm {
             }
         } catch (Exception e) {
             throw new ServiceException(
-                    "Informe a categoria!");
+                    "Informe o(s) ingrediente(s)!");
         }
 
         return produto;

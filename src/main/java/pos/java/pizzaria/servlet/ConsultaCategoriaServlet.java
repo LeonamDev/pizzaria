@@ -72,7 +72,7 @@ public class ConsultaCategoriaServlet extends HttpServlet {
             List<Produto> todosProdutos = produtoRepository.listar();
             
            if(todosProdutos.stream()
-                      .anyMatch(p -> p.getId() == categoriaId))
+                      .anyMatch(p -> p.getCategoria().getId() == categoriaId))
             throw new ServiceException("A categoria já está em uso e portanto não pode ser excluida.");        
 
             Categoria categoria = categoriaRepository.encontrar(Categoria.class, categoriaId);

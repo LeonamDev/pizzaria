@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pos.java.pizzaria.form.ClienteForm;
 import pos.java.pizzaria.model.Cliente;
-import pos.java.pizzaria.model.Pedido;
 import pos.java.pizzaria.repository.ClienteRepository;
 import pos.java.pizzaria.service.ClienteService;
 import pos.java.pizzaria.service.ServiceException;
